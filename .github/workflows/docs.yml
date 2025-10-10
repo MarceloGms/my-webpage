@@ -7,14 +7,31 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
     steps:
       - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
       - name: Build documentation
         run: |
           python -m pip install --upgrade pip
-          pip install "pdoc<15"
-          pdoc --html . --output-dir docs
+          pip install pdoc
+          pdoc -o docs src   # change 'src' if your code lives elsewhere
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
       - name: Upload documentation
         uses: actions/upload-pages-artifact@v3
         with:
           path: docs
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
