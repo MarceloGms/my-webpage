@@ -2,7 +2,7 @@ name: Generate and Deploy Docs
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build:
@@ -11,10 +11,10 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build documentation
         run: |
-          pip install pdoc
+          python -m pip install --upgrade pip
+          pip install "pdoc<15"
           pdoc --html . --output-dir docs
       - name: Upload documentation
         uses: actions/upload-pages-artifact@v3
         with:
           path: docs
-
